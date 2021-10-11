@@ -52,3 +52,9 @@ body {
   padding: 20px;
   text-align: center;
 }
+
+.brand-link,
+.brand-link:hover {
+  text-decoration: none;
+  color: #ffffff;
+}

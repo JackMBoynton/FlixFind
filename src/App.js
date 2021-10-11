@@ -7,12 +7,14 @@ import MovieListHeading from "./components/MovieListHeading";
 import SearchBox from "./components/SearchBox";
 import AddFavourites from "./components/AddFavourites";
 import RemoveFavourites from "./components/RemoveFavourites";
+import MovieDataModal from "./components/MovieDataModal";
 
 function App() {
   // States
   const [movies, setMovies] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [favourites, setFavourites] = useState([]);
+  const [movieData, setMovieData] = useState([]);
 
   const getMovieRequest = async (searchValue) => {
     const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=${process.env.REACT_APP_API_KEY}`; // template string
@@ -21,9 +23,24 @@ function App() {
     const response = await fetch(url);
     const responseJSON = await response.json();
 
+    // if we have results
     if (responseJSON.Search) {
+      // then use setMovies to set our state
       setMovies(responseJSON.Search);
     }
+  };
+
+  // Function for getting individual data for movies
+  const getMovieData = async (movie) => {
+    // movie = {Title: 'Toy Story', Year: '1995', imdbID: 'tt0114709', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMj…TViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_SX300.jpg'}
+
+    const movieURL = `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${process.env.REACT_APP_API_KEY}`;
+
+    // send req using url and convert to JSON
+    const res = await fetch(movieURL);
+    const resJSON = await res.json();
+
+    setMovieData(resJSON);
   };
 
   // any value we add to the array - when it is updated; so the method will be run
@@ -32,9 +49,14 @@ function App() {
   }, [searchValue]);
 
   useEffect(() => {
-    const movieFavourites = JSON.parse(
+    var movieFavourites = JSON.parse(
       localStorage.getItem("react-flixfind-favourites")
     );
+
+    // safeguard for mobile phone usage when ...iterate cannot be null
+    if (!movieFavourites) {
+      movieFavourites = [];
+    }
 
     setFavourites(movieFavourites);
   }, []);
@@ -68,6 +90,7 @@ function App() {
         different things */}
         <MovieList
           movies={movies}
+          handleMovieClick={getMovieData}
           handleFavouritesClick={addFavouriteMovie}
           favouriteComponent={AddFavourites}
         />
@@ -81,6 +104,7 @@ function App() {
         different things */}
         <MovieList
           movies={favourites}
+          handleMovieClick={getMovieData}
           handleFavouritesClick={removeFavouriteMovie}
           favouriteComponent={RemoveFavourites}
         />
