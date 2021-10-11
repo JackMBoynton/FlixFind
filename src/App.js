@@ -31,9 +31,22 @@ function App() {
     getMovieRequest(searchValue);
   }, [searchValue]);
 
+  useEffect(() => {
+    const movieFavourites = JSON.parse(
+      localStorage.getItem("react-flixfind-favourites")
+    );
+
+    setFavourites(movieFavourites);
+  }, []);
+
+  const saveToLocalStorage = (items) => {
+    localStorage.setItem("react-flixfind-favourites", JSON.stringify(items));
+  };
+
   const addFavouriteMovie = (movie) => {
     const newFavouriteList = [...favourites, movie];
     setFavourites(newFavouriteList);
+    saveToLocalStorage(newFavouriteList);
   };
 
   const removeFavouriteMovie = (movie) => {
@@ -41,6 +54,7 @@ function App() {
       (favourite) => favourite.imdbID !== movie.imdbID
     );
     setFavourites(newFavouriteList);
+    saveToLocalStorage(newFavouriteList);
   };
 
   return (
