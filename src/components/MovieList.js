@@ -2,6 +2,7 @@ import React from "react";
 
 const MovieList = (props) => {
   const FavouriteComponent = props.favouriteComponent;
+  const MovieHeading = props.heading;
 
   if (props.movies) {
     return (
@@ -11,14 +12,13 @@ const MovieList = (props) => {
             key={movie.imdbID}
             className="image-container d-flex justify-content-start m-3"
           >
-            <img
-              onClick={() => props.handleMovieClick(movie)}
-              src={movie.Poster}
-              alt="Movie"
-            />
+            <div className="overlay-top d-flex align-items-center justify-content-center">
+              <MovieHeading movieID={movie.imdbID} movieTitle={movie.Title} />
+            </div>
+            <img src={movie.Poster} alt="Movie" />
             <div
               onClick={() => props.handleFavouritesClick(movie)}
-              className="overlay d-flex align-items-center justify-content-center"
+              className="overlay-bottom d-flex align-items-center justify-content-center"
             >
               <FavouriteComponent />
             </div>

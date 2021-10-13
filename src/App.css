@@ -37,11 +37,29 @@ body {
   transform: scale(1.1);
 }
 
-.image-container:hover .overlay {
+.image-container:hover .overlay-bottom,
+.image-container:hover .overlay-top {
   opacity: 1;
 }
 
-.overlay {
+.overlay-top {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  transition: 0.5s ease;
+  opacity: 0;
+  top: 0;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.overlay-top a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.overlay-bottom {
   position: absolute;
   background: rgba(0, 0, 0, 0.8);
   width: 100%;
